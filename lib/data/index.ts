@@ -2,6 +2,8 @@ import { DSVRowArray } from "d3";
 import { csvParse } from "d3-dsv";
 import path from "path";
 import { promises as fs } from "fs";
+import { scaleLinear } from "d3-scale";
+import { range } from "d3-array";
 
 export interface DataRecord {
   code: string;
@@ -35,7 +37,10 @@ const getData = async () => {
   const getKeys = async (response: DSVRowArray<string>) => {
     return new Set(
       response
-        .filter((d) => Boolean(d.Code))
+        .filter(
+          (d) =>
+            Boolean(d.Code) && d.Year && +d.Year >= 1950 && d.Entity != "World"
+        )
         .map((d) => `${d.Code}---${d.Year}`)
     );
   };
@@ -104,7 +109,7 @@ const getData = async () => {
 
   // merge the data
 
-  const mergedData = Array.from(commonKeys).map((key) => {
+  let mergedData = Array.from(commonKeys).map((key) => {
     const [code, year] = key.split("---");
     const population = populationData.find(
       (d) => d.code === code && d.year === +year
@@ -123,6 +128,39 @@ const getData = async () => {
       lifeExpectancy: +lifeExpectancy.lifeExpectancy,
     };
   }) satisfies Data;
+
+  // impute missing data for china
+  // const chinaData = mergedData.filter((d) => d.code === "CHN");
+  // const chinaPopulationScale = scaleLinear()
+  //   .domain(chinaData.map((d) => d.year))
+  //   .range(chinaData.map((d) => d.population));
+  // const chinaGdpScale = scaleLinear()
+  //   .domain(chinaData.map((d) => d.year))
+  //   .range(chinaData.map((d) => d.gdp));
+  // const chinaLifeExpectancyScale = scaleLinear()
+  //   .domain(chinaData.map((d) => d.year))
+  //   .range(chinaData.map((d) => d.lifeExpectancy));
+
+  // const imputeChinaData = (year: number) => {
+  //   return {
+  //     code: "CHN",
+  //     year,
+  //     country: "China",
+  //     population: chinaPopulationScale(year),
+  //     gdp: chinaGdpScale(year),
+  //     lifeExpectancy: chinaLifeExpectancyScale(year),
+  //   };
+  // };
+
+  // const minYear = Math.min(...chinaData.map((d) => d.year));
+  // const maxYear = Math.max(...chinaData.map((d) => d.year));
+  // const imputedChina = range(minYear, maxYear, 1).map((yr) =>
+  //   imputeChinaData(yr)
+  // );
+
+  // mergedData = mergedData.filter((d) => d.code !== "CHN");
+  // mergedData.concat(imputedChina);
+
   return mergedData;
 };
 

@@ -14,7 +14,7 @@ interface PageProps {
 
 export default function Index(props: PageProps) {
   const [year, setYear] = useState(2000);
-  // console.log(props.data);
+  console.log(props.data);
   return (
     <Grid
       container
@@ -33,7 +33,7 @@ export default function Index(props: PageProps) {
           value={year}
           defaultValue={2000}
           min={1950}
-          max={2020}
+          max={2018}
           valueLabelDisplay="on"
         />
         <Container maxWidth="md" sx={{ height: "400px" }}>

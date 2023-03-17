@@ -2,7 +2,7 @@
 import type { Data } from "@/lib/data";
 import { Group } from "@visx/group";
 import { Circle } from "@visx/shape";
-import { scaleLinear, scaleRadial } from "@visx/scale";
+import { scaleLinear, scaleRadial, scalePower, scaleLog } from "@visx/scale";
 
 interface Props {
   data: Data;
@@ -15,19 +15,20 @@ export const ScatterPlot = (props: Props) => {
   const { data, width, height, year } = props;
   console.log(width, height);
   const oneYear = data.filter((d) => d.year === year);
-  const xScale = scaleLinear({
-    domain: [0, 20000],
+  const xScale = scaleLog({
+    domain: [400, 200000],
     range: [0, width],
+    base: 10,
   });
 
   const yScale = scaleLinear({
-    domain: [0, 100],
+    domain: [25, 100],
     range: [height, 0],
   });
 
   const rScale = scaleRadial({
     domain: [0, 1_000_000_000],
-    range: [0, 32],
+    range: [0, 48],
   });
 
   return (
@@ -41,6 +42,7 @@ export const ScatterPlot = (props: Props) => {
               cy={yScale(d.lifeExpectancy)}
               r={rScale(d.population)}
               fill="rgba(255, 255, 255, 0.5)"
+              aria-label={`${d.country} has a population of ${d.population}`}
             />
           );
         })}
