@@ -6,6 +6,7 @@ import { promises as fs } from "fs";
 export interface DataRecord {
   code: string;
   year: number;
+  continent: string;
   country: string;
   population: number;
   gdp: number;
@@ -30,6 +31,7 @@ const getData = async () => {
   const population = loadAndParseCsv("population.csv");
   const gdp = loadAndParseCsv("gdp-per-capita.csv");
   const lifeExpectancy = loadAndParseCsv("life-expectancy.csv");
+  const continents = loadAndParseCsv("continents.csv");
 
   // wait for all the csv-s to be fetched
   const [populationResponse, gdpResponse, lifeExpectancyResponse] =
@@ -110,6 +112,7 @@ const getData = async () => {
   ]);
 
   // merge the data
+  const continentsData = await continents;
 
   let mergedData = Array.from(commonKeys).map((key) => {
     const [code, year] = key.split("---");
@@ -121,17 +124,18 @@ const getData = async () => {
       (d) => d.code === code && d.year === +year
     );
 
+    const continent = continentsData.find((d) => d.Code === code);
+
     return {
       code,
       year: +year,
+      continent: continent?.Continent as string,
       country: population.country as string,
       population: +population.population,
       gdp: +gdp.gdp,
       lifeExpectancy: +lifeExpectancy.lifeExpectancy,
     };
   }) satisfies Data;
-
-  // todo: rearrange the data with years as the keys
 
   const yearlyData = mergedData.reduce((acc, d) => {
     if (!acc[d.year]) {

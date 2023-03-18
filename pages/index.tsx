@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import Grid from "@mui/material/Grid";
 import getData, { YearlyData } from "@/lib/data";
+import Paper from "@mui/material/Paper";
+import Card from "@mui/material/Card";
 import { Container } from "@mui/system";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
 import { ScatterPlot } from "@/components/ScatterPlot";
@@ -22,8 +24,12 @@ export default function Index(props: PageProps) {
       direction={"column"}
       height={"100vh"}
     >
-      <Box width={"40%"}>
-        <Typography variant="h2" component="h2" gutterBottom>
+      <Card
+        raised
+        elevation={3}
+        sx={{ padding: "32px", borderRadius: "12px", width: "65%" }}
+      >
+        <Typography variant="h4" component="h2" gutterBottom>
           Set the year
         </Typography>
         <Slider
@@ -35,8 +41,8 @@ export default function Index(props: PageProps) {
           max={2018}
           valueLabelDisplay="on"
         />
-        <Container maxWidth="md" sx={{ height: "400px" }}>
-          <ParentSize className="graphName" debounceTime={10}>
+        <Container sx={{ height: "400px", position: "relative" }}>
+          <ParentSize className="graphName" debounceTime={5}>
             {({ width, height }) => {
               return (
                 <ScatterPlot
@@ -49,7 +55,7 @@ export default function Index(props: PageProps) {
             }}
           </ParentSize>
         </Container>
-      </Box>
+      </Card>
     </Grid>
   );
 }
