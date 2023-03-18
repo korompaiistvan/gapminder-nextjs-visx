@@ -2,8 +2,6 @@ import { DSVRowArray } from "d3";
 import { csvParse } from "d3-dsv";
 import path from "path";
 import { promises as fs } from "fs";
-import { scaleLinear } from "d3-scale";
-import { range, group } from "d3-array";
 
 export interface DataRecord {
   code: string;
@@ -132,36 +130,6 @@ const getData = async () => {
       lifeExpectancy: +lifeExpectancy.lifeExpectancy,
     };
   }) satisfies Data;
-
-  // impute missing data for china
-  // const chinaData = mergedData.filter((d) => d.code === "CHN");
-  // const chinaPopulationScale = scaleLinear()
-  //   .domain(chinaData.map((d) => d.year))
-  //   .range(chinaData.map((d) => d.population));
-  // const chinaGdpScale = scaleLinear()
-  //   .domain(chinaData.map((d) => d.year))
-  //   .range(chinaData.map((d) => d.gdp));
-  // const chinaLifeExpectancyScale = scaleLinear()
-  //   .domain(chinaData.map((d) => d.year))
-  //   .range(chinaData.map((d) => d.lifeExpectancy));
-
-  // const imputeChinaData = (year: number) => {
-  //   return {
-  //     code: "CHN",
-  //     year,
-  //     country: "China",
-  //     population: chinaPopulationScale(year),
-  //     gdp: chinaGdpScale(year),
-  //     lifeExpectancy: chinaLifeExpectancyScale(year),
-  //   };
-  // };
-
-  // const imputedChina = range(minYear, maxYear, 1).map((yr) =>
-  //   imputeChinaData(yr)
-  // );
-
-  // mergedData = mergedData.filter((d) => d.code !== "CHN");
-  // mergedData.concat(imputedChina);
 
   // todo: rearrange the data with years as the keys
 
