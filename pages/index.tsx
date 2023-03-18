@@ -2,19 +2,18 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import Grid from "@mui/material/Grid";
-import getData, { Data } from "@/lib/data";
+import getData, { YearlyData } from "@/lib/data";
 import { Container } from "@mui/system";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
 import { ScatterPlot } from "@/components/ScatterPlot";
 import { useState } from "react";
 
 interface PageProps {
-  data: Data;
+  data: YearlyData;
 }
 
 export default function Index(props: PageProps) {
   const [year, setYear] = useState(2000);
-  console.log(props.data);
   return (
     <Grid
       container

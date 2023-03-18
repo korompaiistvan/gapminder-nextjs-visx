@@ -3,7 +3,7 @@ import { csvParse } from "d3-dsv";
 import path from "path";
 import { promises as fs } from "fs";
 import { scaleLinear } from "d3-scale";
-import { range } from "d3-array";
+import { range, group } from "d3-array";
 
 export interface DataRecord {
   code: string;
@@ -15,6 +15,10 @@ export interface DataRecord {
 }
 
 export interface Data extends Array<DataRecord> {}
+
+export interface YearlyData {
+  [key: number]: Data;
+}
 
 const getData = async () => {
   // fetch the csv-s from public folder
@@ -152,8 +156,6 @@ const getData = async () => {
   //   };
   // };
 
-  // const minYear = Math.min(...chinaData.map((d) => d.year));
-  // const maxYear = Math.max(...chinaData.map((d) => d.year));
   // const imputedChina = range(minYear, maxYear, 1).map((yr) =>
   //   imputeChinaData(yr)
   // );
@@ -161,7 +163,17 @@ const getData = async () => {
   // mergedData = mergedData.filter((d) => d.code !== "CHN");
   // mergedData.concat(imputedChina);
 
-  return mergedData;
+  // todo: rearrange the data with years as the keys
+
+  const yearlyData = mergedData.reduce((acc, d) => {
+    if (!acc[d.year]) {
+      acc[d.year] = [];
+    }
+    acc[d.year].push(d);
+    return acc;
+  }, {} as YearlyData);
+
+  return yearlyData;
 };
 
 export default getData;
