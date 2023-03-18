@@ -85,8 +85,8 @@ export const ScatterPlot = (props: Props) => {
             textAnchor: "middle",
           })}
           tickFormat={(d) => {
-            if (d < 1000) return `${d}`;
-            if (d < 1000000) return `${+d / 1000}k`;
+            if (+d < 1000) return `${d}`;
+            if (+d < 1000000) return `${+d / 1000}k`;
             return `${+d / 1000000}m`;
           }}
           tickValues={[250, 1000, 10000, 100000, 100000]}
