@@ -7,6 +7,11 @@ import { AxisBottom, AxisLeft } from "@visx/axis";
 import { NumberValue } from "d3-scale";
 import { GridRows, GridColumns } from "@visx/grid";
 import { Legend } from "@visx/legend";
+import { defaultStyles, useTooltipInPortal } from "@visx/tooltip";
+import { useState, MouseEvent } from "react";
+import Stack from "@mui/material/Stack";
+import Fade from "@mui/material/Fade";
+import dynamic from "next/dynamic";
 
 interface Props {
   data: YearlyData;
@@ -29,6 +34,15 @@ const colorScale = scaleOrdinal<string>({
 
 export const ScatterPlot = (props: Props) => {
   const { data, width, height, year } = props;
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const [highlightedCountry, setHighlightedCountry] = useState<string | null>(
+    null
+  );
+
   const margin = 24;
   const bottomAxisSize = 40;
   const leftAxisSize = 40;
@@ -46,12 +60,46 @@ export const ScatterPlot = (props: Props) => {
 
   const rScale = scaleRadial({
     domain: [0, 1_000_000_000],
-    range: [0, 48],
+    range: [0, 24],
   });
+
+  const { containerRef, containerBounds, TooltipInPortal } = useTooltipInPortal(
+    {
+      scroll: true,
+      detectBounds: true,
+    }
+  );
+
+  const handleContainerClick = (event: MouseEvent) => {
+    event.preventDefault();
+    if (event.target === event.currentTarget) {
+      setTooltipOpen(false);
+    }
+  };
+
+  const tooltipData = oneYear.find((d) => d.country === highlightedCountry);
+
+  const handleCircleEnter = (country: string) => (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setTooltipPosition({
+      x: event.clientX - containerBounds.left,
+      y: event.clientY - containerBounds.top,
+    });
+    setHighlightedCountry(country);
+    setTooltipOpen(true);
+  };
+
+  const handleCircleExit = (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setTooltipOpen(false);
+    setHighlightedCountry(null);
+  };
 
   return (
     <>
-      <svg width={width} height={height}>
+      <svg width={width} height={height} ref={containerRef}>
         <Group>
           {oneYear.map((d, i) => {
             return (
@@ -61,13 +109,41 @@ export const ScatterPlot = (props: Props) => {
                 cy={yScale(d.lifeExpectancy)}
                 r={rScale(d.population)}
                 fill={colorScale(d.continent) as string}
-                fillOpacity={0.75}
+                fillOpacity={d.country === highlightedCountry ? 1 : 0.75}
                 aria-label={`${d.country} has a population of ${d.population}`}
                 style={{ transition: "all 0.2s linear" }}
+                onMouseEnter={handleCircleEnter(d.country)}
+                onMouseLeave={handleCircleExit}
               />
             );
           })}
         </Group>
+        <Fade in={tooltipOpen}>
+          <div>
+            <TooltipInPortal
+              key={Math.random()}
+              top={tooltipPosition?.y ?? 0}
+              left={tooltipPosition?.x ?? 0}
+              style={{
+                ...defaultStyles,
+                background: "rgba(0, 0, 0, 0.8)",
+                color: "white",
+                padding: "8px",
+                borderRadius: "4px",
+              }}
+            >
+              <Stack>
+                <div>
+                  {tooltipData?.country} in {year}
+                </div>
+                <div>Population: {tooltipData?.population}</div>
+                <div>GDP per capita: {tooltipData?.gdp}</div>
+                <div>Life expectancy: {tooltipData?.lifeExpectancy}</div>
+              </Stack>
+            </TooltipInPortal>
+          </div>
+        </Fade>
+
         <AxisBottom
           top={height - bottomAxisSize - margin}
           scale={xScale}
@@ -137,3 +213,5 @@ export const ScatterPlot = (props: Props) => {
     </>
   );
 };
+
+export default ScatterPlot;
