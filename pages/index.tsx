@@ -23,9 +23,10 @@ export default function Index(props: PageProps) {
   >(null);
   const deferredYear = useDeferredValue(year);
 
-  const yearBounds = useMemo(() => [1948, 2018], []);
+  const yearBounds = useMemo(() => [1950, 2018], []);
+  const animationSpeed = 125;
 
-  useEffect(() => {
+  const play = () => {
     if (!playDirection) {
       return;
     }
@@ -33,21 +34,22 @@ export default function Index(props: PageProps) {
       if (year < yearBounds[1]) {
         setTimeout(() => {
           setYear(year + 1);
-        }, 150);
+        }, animationSpeed);
         return;
       }
     } else if (playDirection === "backward") {
       if (year > yearBounds[0]) {
         setTimeout(() => {
           setYear(year - 1);
-        }, 150);
+        }, animationSpeed);
 
         return;
       }
     }
     setPlayDirection(null);
     return;
-  }, [playDirection, year, yearBounds]);
+  };
+  play();
 
   const scatterPLot = useMemo(() => {
     return (
@@ -76,10 +78,10 @@ export default function Index(props: PageProps) {
       <Card
         raised
         elevation={3}
-        sx={{ padding: "32px", borderRadius: "12px", width: "65%" }}
+        sx={{ padding: "32px", borderRadius: "12px", width: "760px" }}
       >
         <Typography variant="h4" component="h2" marginBottom={"32px"}>
-          200 countries, 70 years, 1 chart
+          200 countries, 68 years, 1 chart
         </Typography>
         <Typography variant="body2" marginBottom={"24px"}>
           The Gapminder moving bubble chart is a powerful visualization tool
@@ -88,43 +90,57 @@ export default function Index(props: PageProps) {
           physician and data analyst who dedicated his life to promoting a
           fact-based worldview. The chart shows data on various countries and
           regions of the world, plotted against each other on an x-y axis, with
-          the size of the bubbles representing a third variable, such as
-          population or GDP. The bubbles move over time, showing changes in
-          these variables over decades, and allowing viewers to see how
-          countries have developed and how they compare to each other. The chart
-          is an excellent way to grasp global trends and see how our world is
-          changing over time.
+          the size of the bubbles representing population. The bubbles move over
+          time, showing changes in these variables over decades, and allowing
+          viewers to see how countries have developed and how they compare to
+          each other. The chart is an excellent way to grasp global trends and
+          see how our world is changing over time.
         </Typography>
-        <Stack direction="row" gap={"24px"} alignItems={"center"}>
+        <Stack
+          direction="row"
+          gap={"24px"}
+          alignItems={"center"}
+          marginBottom={"24px"}
+        >
           <Button
             variant="outlined"
-            size="medium"
+            size="small"
             startIcon={<FastRewind />}
             onClick={() => setPlayDirection("backward")}
+            style={{ paddingRight: "16px", paddingLeft: "16px" }}
           >
             Rewind
           </Button>
           <Slider
             aria-label="Year"
-            onChange={(e, v) => setYear(v as number)}
+            onChange={(e, v) => {
+              setYear(v as number);
+              setPlayDirection(null);
+            }}
             value={year}
             defaultValue={2000}
             min={yearBounds[0]}
             max={yearBounds[1]}
-            valueLabelDisplay="on"
           />
           <Button
             variant="outlined"
-            size="medium"
+            size="small"
             endIcon={<FastForward />}
             onClick={() => setPlayDirection("forward")}
+            style={{ paddingRight: "16px", paddingLeft: "16px" }}
           >
             Play
           </Button>
         </Stack>
-        <Container sx={{ height: "400px", position: "relative" }}>
+        <Box
+          sx={{
+            height: "400px",
+            position: "relative",
+            padding: "0",
+          }}
+        >
           {scatterPLot}
-        </Container>
+        </Box>
       </Card>
     </Stack>
   );

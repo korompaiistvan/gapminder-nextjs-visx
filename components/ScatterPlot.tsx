@@ -8,10 +8,9 @@ import { NumberValue } from "d3-scale";
 import { GridRows, GridColumns } from "@visx/grid";
 import { Legend } from "@visx/legend";
 import { defaultStyles, useTooltipInPortal } from "@visx/tooltip";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, forwardRef } from "react";
 import Stack from "@mui/material/Stack";
-import Fade from "@mui/material/Fade";
-import dynamic from "next/dynamic";
+import Typography from "@mui/material/Typography";
 
 interface Props {
   data: YearlyData;
@@ -29,7 +28,7 @@ const colorScale = scaleOrdinal<string>({
     "South America",
     "North America",
   ],
-  range: ["#FC7753", "#66D7D1", "#615C84", "#EB7BC0", "#F2EFEA", "#DBD56E"],
+  range: ["#FC7753", "#66D7D1", "#666290", "#EB7BC0", "#F2EFEA", "#DBD56E"],
 });
 
 export const ScatterPlot = (props: Props) => {
@@ -44,8 +43,8 @@ export const ScatterPlot = (props: Props) => {
   );
 
   const margin = 24;
-  const bottomAxisSize = 40;
-  const leftAxisSize = 40;
+  const bottomAxisSize = 32;
+  const leftAxisSize = 32;
   const oneYear = data[year];
   const xScale = scaleLog({
     domain: [250, 100_000],
@@ -63,19 +62,8 @@ export const ScatterPlot = (props: Props) => {
     range: [0, 24],
   });
 
-  const { containerRef, containerBounds, TooltipInPortal } = useTooltipInPortal(
-    {
-      scroll: true,
-      detectBounds: true,
-    }
-  );
-
-  const handleContainerClick = (event: MouseEvent) => {
-    event.preventDefault();
-    if (event.target === event.currentTarget) {
-      setTooltipOpen(false);
-    }
-  };
+  const { containerRef, containerBounds, TooltipInPortal } =
+    useTooltipInPortal();
 
   const tooltipData = oneYear.find((d) => d.country === highlightedCountry);
 
@@ -118,82 +106,58 @@ export const ScatterPlot = (props: Props) => {
             );
           })}
         </Group>
-        <Fade in={tooltipOpen}>
-          <div>
-            <TooltipInPortal
-              key={Math.random()}
-              top={tooltipPosition?.y ?? 0}
-              left={tooltipPosition?.x ?? 0}
-              style={{
-                ...defaultStyles,
-                background: "rgba(0, 0, 0, 0.8)",
-                color: "white",
-                padding: "8px",
-                borderRadius: "4px",
-              }}
-            >
-              <Stack>
-                <div>
-                  {tooltipData?.country} in {year}
-                </div>
-                <div>Population: {tooltipData?.population}</div>
-                <div>GDP per capita: {tooltipData?.gdp}</div>
-                <div>Life expectancy: {tooltipData?.lifeExpectancy}</div>
-              </Stack>
-            </TooltipInPortal>
-          </div>
-        </Fade>
-
-        <AxisBottom
-          top={height - bottomAxisSize - margin}
-          scale={xScale}
-          label="GDP per capita"
-          labelProps={{
-            fill: "white",
-            fontSize: 12,
-            textAnchor: "middle",
-          }}
-          stroke="white"
-          tickStroke="white"
-          tickLabelProps={() => ({
-            fill: "white",
-            fontSize: 11,
-            textAnchor: "middle",
-          })}
-          tickFormat={(d) => {
-            if (+d < 1000) return `${d}`;
-            if (+d < 1000000) return `${+d / 1000}k`;
-            return `${+d / 1000000}m`;
-          }}
-          tickValues={[250, 1000, 10000, 100000, 100000]}
-        />
+        <g opacity={0.66}>
+          <AxisBottom
+            top={height - bottomAxisSize - margin}
+            scale={xScale}
+            label="GDP per capita"
+            labelProps={{
+              fill: "white",
+              fontSize: 12,
+              textAnchor: "middle",
+            }}
+            stroke="white"
+            tickStroke="white"
+            tickLabelProps={() => ({
+              fill: "white",
+              fontSize: 11,
+              textAnchor: "middle",
+            })}
+            tickFormat={(d) => {
+              if (+d < 1000) return `${d}`;
+              if (+d < 1000000) return `${+d / 1000}k`;
+              return `${+d / 1000000}m`;
+            }}
+            tickValues={[250, 1000, 10000, 100000, 100000]}
+          />
+          <AxisLeft
+            scale={yScale}
+            left={leftAxisSize + margin}
+            label="Life expectancy"
+            labelProps={{
+              fill: "white",
+              fontSize: 12,
+              textAnchor: "middle",
+            }}
+            stroke="white"
+            tickStroke="white"
+            tickLabelProps={() => ({
+              fill: "white",
+              fontSize: 11,
+              textAnchor: "end",
+            })}
+          />
+        </g>
         <GridRows
           scale={yScale}
-          width={width - leftAxisSize - margin}
-          stroke="rgba(255, 255, 255, 0.1)"
+          width={width - leftAxisSize - 2 * margin}
+          stroke="rgba(255, 255, 255, 0.05)"
           left={leftAxisSize + margin}
-        />
-        <AxisLeft
-          scale={yScale}
-          left={leftAxisSize + margin}
-          label="Life expectancy"
-          labelProps={{
-            fill: "white",
-            fontSize: 12,
-            textAnchor: "middle",
-          }}
-          stroke="white"
-          tickStroke="white"
-          tickLabelProps={() => ({
-            fill: "white",
-            fontSize: 11,
-            textAnchor: "end",
-          })}
         />
         <GridColumns
           scale={xScale}
-          height={height - bottomAxisSize - margin}
-          stroke="rgba(255, 255, 255, 0.1)"
+          height={height - bottomAxisSize - 2 * margin}
+          stroke="rgba(255, 255, 255, 0.05)"
           top={margin}
         />
       </svg>
@@ -204,12 +168,48 @@ export const ScatterPlot = (props: Props) => {
         labelFormat={(label) => label}
         style={{
           position: "absolute",
-          bottom: bottomAxisSize + margin,
+          bottom: bottomAxisSize + margin / 2,
           right: 0,
           margin: "20px",
           display: "flex",
+          fontSize: "12px",
+          color: "rgba(255, 255, 255, 0.75)",
         }}
       />
+      {tooltipOpen && (
+        <TooltipInPortal
+          key={Math.random()}
+          top={tooltipPosition?.y ?? 0}
+          left={tooltipPosition?.x ?? 0}
+          style={{
+            ...defaultStyles,
+            background: "rgba(0, 0, 0, 0.8)",
+            color: "white",
+            padding: "8px",
+            borderRadius: "4px",
+          }}
+        >
+          <Stack>
+            <div>
+              {tooltipData?.country} in {year}
+            </div>
+            <div>Population: {tooltipData?.population}</div>
+            <div>GDP per capita: {tooltipData?.gdp}</div>
+            <div>Life expectancy: {tooltipData?.lifeExpectancy}</div>
+          </Stack>
+        </TooltipInPortal>
+      )}
+      <Typography
+        position={"absolute"}
+        right={margin}
+        bottom={bottomAxisSize + margin + 24}
+        style={{
+          fontSize: "72px",
+          opacity: 0.15,
+        }}
+      >
+        {year}
+      </Typography>
     </>
   );
 };
