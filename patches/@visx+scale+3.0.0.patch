@@ -1,0 +1,208 @@
+diff --git a/node_modules/@visx/scale/lib/operators/round.js b/node_modules/@visx/scale/lib/operators/round.js
+index ef7e6e2..d5af9c5 100644
+--- a/node_modules/@visx/scale/lib/operators/round.js
++++ b/node_modules/@visx/scale/lib/operators/round.js
+@@ -2,7 +2,7 @@
+ 
+ exports.__esModule = true;
+ exports.default = applyRound;
+-var _d3Interpolate = require("d3-interpolate");
++var _d3Interpolate = import("d3-interpolate");
+ function applyRound(scale, config) {
+   if ('round' in config && typeof config.round !== 'undefined') {
+     if (config.round && 'interpolate' in config && typeof config.interpolate !== 'undefined') {
+diff --git a/node_modules/@visx/scale/lib/scales/band.js b/node_modules/@visx/scale/lib/scales/band.js
+index b35fbd1..20a18aa 100644
+--- a/node_modules/@visx/scale/lib/scales/band.js
++++ b/node_modules/@visx/scale/lib/scales/band.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createBandScale;
+ exports.updateBandScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateBandScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'align', 'padding', 'round');
+diff --git a/node_modules/@visx/scale/lib/scales/linear.js b/node_modules/@visx/scale/lib/scales/linear.js
+index 13a88d0..1f0b1c0 100644
+--- a/node_modules/@visx/scale/lib/scales/linear.js
++++ b/node_modules/@visx/scale/lib/scales/linear.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createLinearScale;
+ exports.updateLinearScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateLinearScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'clamp', 'interpolate', 'nice', 'round', 'zero');
+diff --git a/node_modules/@visx/scale/lib/scales/log.js b/node_modules/@visx/scale/lib/scales/log.js
+index 1833224..0f9fe82 100644
+--- a/node_modules/@visx/scale/lib/scales/log.js
++++ b/node_modules/@visx/scale/lib/scales/log.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createLogScale;
+ exports.updateLogScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateLogScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'base', 'clamp', 'interpolate', 'nice', 'round');
+diff --git a/node_modules/@visx/scale/lib/scales/ordinal.js b/node_modules/@visx/scale/lib/scales/ordinal.js
+index 7e77103..c107c8c 100644
+--- a/node_modules/@visx/scale/lib/scales/ordinal.js
++++ b/node_modules/@visx/scale/lib/scales/ordinal.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createOrdinalScale;
+ exports.updateOrdinalScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateOrdinalScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'unknown');
+diff --git a/node_modules/@visx/scale/lib/scales/point.js b/node_modules/@visx/scale/lib/scales/point.js
+index 2f4dce9..f4499a1 100644
+--- a/node_modules/@visx/scale/lib/scales/point.js
++++ b/node_modules/@visx/scale/lib/scales/point.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createPointScale;
+ exports.updatePointScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updatePointScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'align', 'padding', 'round');
+diff --git a/node_modules/@visx/scale/lib/scales/power.js b/node_modules/@visx/scale/lib/scales/power.js
+index 836cb56..72250e2 100644
+--- a/node_modules/@visx/scale/lib/scales/power.js
++++ b/node_modules/@visx/scale/lib/scales/power.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createPowScale;
+ exports.updatePowScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updatePowScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'clamp', 'exponent', 'interpolate', 'nice', 'round', 'zero');
+diff --git a/node_modules/@visx/scale/lib/scales/quantile.js b/node_modules/@visx/scale/lib/scales/quantile.js
+index 1a76e11..27e1666 100644
+--- a/node_modules/@visx/scale/lib/scales/quantile.js
++++ b/node_modules/@visx/scale/lib/scales/quantile.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createQuantileScale;
+ exports.updateQuantileScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateQuantileScale = (0, _scaleOperator.default)('domain', 'range', 'reverse');
+diff --git a/node_modules/@visx/scale/lib/scales/quantize.js b/node_modules/@visx/scale/lib/scales/quantize.js
+index ecef59b..95ce699 100644
+--- a/node_modules/@visx/scale/lib/scales/quantize.js
++++ b/node_modules/@visx/scale/lib/scales/quantize.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createQuantizeScale;
+ exports.updateQuantizeScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateQuantizeScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'nice', 'zero');
+diff --git a/node_modules/@visx/scale/lib/scales/radial.js b/node_modules/@visx/scale/lib/scales/radial.js
+index 3f56ed7..93c95f6 100644
+--- a/node_modules/@visx/scale/lib/scales/radial.js
++++ b/node_modules/@visx/scale/lib/scales/radial.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createRadialScale;
+ exports.updateRadialScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateRadialScale = (0, _scaleOperator.default)('domain', 'range', 'clamp', 'nice', 'round', 'unknown');
+diff --git a/node_modules/@visx/scale/lib/scales/squareRoot.js b/node_modules/@visx/scale/lib/scales/squareRoot.js
+index 805e813..62381cb 100644
+--- a/node_modules/@visx/scale/lib/scales/squareRoot.js
++++ b/node_modules/@visx/scale/lib/scales/squareRoot.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createSqrtScale;
+ exports.updateSqrtScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateSqrtScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'clamp', 'interpolate', 'nice', 'round', 'zero');
+diff --git a/node_modules/@visx/scale/lib/scales/symlog.js b/node_modules/@visx/scale/lib/scales/symlog.js
+index b1594f9..eec35fb 100644
+--- a/node_modules/@visx/scale/lib/scales/symlog.js
++++ b/node_modules/@visx/scale/lib/scales/symlog.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createSymlogScale;
+ exports.updateSymlogScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateSymlogScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'clamp', 'constant', 'nice', 'zero', 'round');
+diff --git a/node_modules/@visx/scale/lib/scales/threshold.js b/node_modules/@visx/scale/lib/scales/threshold.js
+index a2475b3..02da259 100644
+--- a/node_modules/@visx/scale/lib/scales/threshold.js
++++ b/node_modules/@visx/scale/lib/scales/threshold.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createThresholdScale;
+ exports.updateThresholdScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateThresholdScale = (0, _scaleOperator.default)('domain', 'range', 'reverse');
+diff --git a/node_modules/@visx/scale/lib/scales/time.js b/node_modules/@visx/scale/lib/scales/time.js
+index e40c73d..62a0951 100644
+--- a/node_modules/@visx/scale/lib/scales/time.js
++++ b/node_modules/@visx/scale/lib/scales/time.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createTimeScale;
+ exports.updateTimeScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateTimeScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'clamp', 'interpolate', 'nice', 'round');
+diff --git a/node_modules/@visx/scale/lib/scales/utc.js b/node_modules/@visx/scale/lib/scales/utc.js
+index ac10b27..8c7826b 100644
+--- a/node_modules/@visx/scale/lib/scales/utc.js
++++ b/node_modules/@visx/scale/lib/scales/utc.js
+@@ -3,7 +3,7 @@
+ exports.__esModule = true;
+ exports.default = createUtcScale;
+ exports.updateUtcScale = void 0;
+-var _d3Scale = require("d3-scale");
++var _d3Scale = import("d3-scale");
+ var _scaleOperator = _interopRequireDefault(require("../operators/scaleOperator"));
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ var updateUtcScale = (0, _scaleOperator.default)('domain', 'range', 'reverse', 'clamp', 'interpolate', 'nice', 'round');
+diff --git a/node_modules/@visx/scale/lib/utils/createColorInterpolator.js b/node_modules/@visx/scale/lib/utils/createColorInterpolator.js
+index b0773d8..c72549f 100644
+--- a/node_modules/@visx/scale/lib/utils/createColorInterpolator.js
++++ b/node_modules/@visx/scale/lib/utils/createColorInterpolator.js
+@@ -2,7 +2,7 @@
+ 
+ exports.__esModule = true;
+ exports.default = createColorInterpolator;
+-var _d3Interpolate = require("d3-interpolate");
++var _d3Interpolate = import("d3-interpolate");
+ var interpolatorMap = {
+   lab: _d3Interpolate.interpolateLab,
+   hcl: _d3Interpolate.interpolateHcl,
