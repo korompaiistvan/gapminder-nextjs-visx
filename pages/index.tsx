@@ -3,12 +3,11 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import Grid from "@mui/material/Grid";
 import getData, { YearlyData } from "@/lib/data";
-import Paper from "@mui/material/Paper";
 import Card from "@mui/material/Card";
 import { Container } from "@mui/system";
 import ParentSize from "@visx/responsive/lib/components/ParentSize";
 import { ScatterPlot } from "@/components/ScatterPlot";
-import { useState } from "react";
+import { useState, useDeferredValue, useMemo } from "react";
 
 interface PageProps {
   data: YearlyData;
@@ -16,6 +15,25 @@ interface PageProps {
 
 export default function Index(props: PageProps) {
   const [year, setYear] = useState(2000);
+  const deferredYear = useDeferredValue(year);
+
+  const scatterPLot = useMemo(() => {
+    return (
+      <ParentSize className="graphName" debounceTime={5}>
+        {({ width, height }) => {
+          return (
+            <ScatterPlot
+              data={props.data}
+              width={width}
+              height={height}
+              year={deferredYear}
+            />
+          );
+        }}
+      </ParentSize>
+    );
+  }, [deferredYear, props.data]);
+
   return (
     <Grid
       container
@@ -42,18 +60,7 @@ export default function Index(props: PageProps) {
           valueLabelDisplay="on"
         />
         <Container sx={{ height: "400px", position: "relative" }}>
-          <ParentSize className="graphName" debounceTime={5}>
-            {({ width, height }) => {
-              return (
-                <ScatterPlot
-                  data={props.data}
-                  width={width}
-                  height={height}
-                  year={year}
-                />
-              );
-            }}
-          </ParentSize>
+          {scatterPLot}
         </Container>
       </Card>
     </Grid>
