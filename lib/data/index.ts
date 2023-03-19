@@ -43,7 +43,7 @@ const getData = async () => {
       response
         .filter(
           (d) =>
-            Boolean(d.Code) && d.Year && +d.Year >= 1950 && d.Entity != "World"
+            Boolean(d.Code) && d.Year && +d.Year >= 1948 && d.Entity != "World"
         )
         .map((d) => `${d.Code}---${d.Year}`)
     );

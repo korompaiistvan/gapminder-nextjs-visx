@@ -124,14 +124,14 @@ export const ScatterPlot = (props: Props) => {
       <Legend
         scale={colorScale}
         direction="row"
-        labelMargin="0 15px 0 0"
-        itemMargin="0 15px"
+        itemMargin="0 4px"
         labelFormat={(label) => label}
         style={{
           position: "absolute",
           bottom: bottomAxisSize + margin,
           right: 0,
           margin: "20px",
+          display: "flex",
         }}
       />
     </>
